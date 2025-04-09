@@ -15,6 +15,7 @@ module.exports = {
     'no-param-reassign': [2, { props: false }],
     'class-methods-use-this': 0,
     'import/no-unresolved': 0,
+    'import/prefer-default-export': 0,
     'import/no-cycle': 0,
     'linebreak-style': ['error', 'unix'],
     'no-await-in-loop': 0,

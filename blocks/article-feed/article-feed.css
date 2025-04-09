@@ -1,0 +1,22 @@
+.article-feed .article-feed-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.article-feed-article-image-link {
+  display: block;
+  position: relative;
+  padding-bottom: 50%;
+
+  picture {
+    position: absolute;
+    inset: 0;
+  }
+
+  img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+  }
+}

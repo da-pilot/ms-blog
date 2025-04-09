@@ -1,6 +1,6 @@
 const AUTO_BLOCKS = [
   { fragment: '/fragments/' },
-  { youtube: 'https://www.youtube.com' },
+  { youtube: 'https://www.youtube' },
 ];
 
 function getEnv() {
@@ -58,17 +58,14 @@ export async function loadStyle(href) {
 
 export async function loadBlock(block) {
   const { classList } = block;
-  let name = classList[0];
+  const name = classList[0];
   block.dataset.blockName = name;
   const blockPath = `/blocks/${name}/${name}`;
   const loaded = [new Promise((resolve) => {
     (async () => {
       try {
         await (await import(`${blockPath}.js`)).default(block);
-      } catch (e) {
-        console.log(`Failed loading: ${name}`);
-        console.log(e);
-      }
+      } catch (e) { console.log(e); }
       resolve();
     })();
   })];
@@ -182,7 +179,12 @@ export async function loadArea(area = document) {
   if (isDoc) import('./lazy.js').then(({ default: lazy }) => lazy());
 }
 
-(function getTemplate() {
+(async function loadNx() {
+  // Setup Config
+  const { config } = await import('./scripts.js');
+  setConfig(config);
+
+  // Setup template
   const template = getMetadata('template');
   if (template) { document.body.classList.add(`${template}-template`); }
 }());
