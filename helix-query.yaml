@@ -25,6 +25,9 @@ indices:
         select: head > meta[property="og:image"]
         value: |
           match(attribute(el, "content"), "https:\/\/[^/]+(/.*)")
+      content:
+        select: main > div
+        values: characters(textContent(el), 0, 200)
       tags:
         select: head > meta[property="article:tag"]
         values: |

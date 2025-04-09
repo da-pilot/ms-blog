@@ -21,7 +21,8 @@ export function getLocale(locales = { '': {} }) {
   const matches = Object.keys(locales).filter((locale) => pathname.startsWith(`/${locale}/`));
   const prefix = getMetadata('locale') || matches.sort((a, b) => b.length - a.length)?.[0] || '';
   if (locales[prefix].ietf) document.documentElement.lang = locales[prefix].ietf;
-  return { prefix, ...locales[prefix] };
+  const base = prefix === '' ? '' : `/${prefix}`;
+  return { prefix, base, ...locales[prefix] };
 }
 
 export const [setConfig, getConfig] = (() => {
@@ -64,7 +65,10 @@ export async function loadBlock(block) {
     (async () => {
       try {
         await (await import(`${blockPath}.js`)).default(block);
-      } catch { console.log(`Failed loading: ${name}`); }
+      } catch (e) {
+        console.log(`Failed loading: ${name}`);
+        console.log(e);
+      }
       resolve();
     })();
   })];
