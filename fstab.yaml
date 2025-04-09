@@ -1,4 +1,4 @@
 mountpoints:
   /:
-    url: https://content.da.live/aabsites/disney-events/
+    url: https://content.da.live/da-pilot/ms-blog/
     type: markup
