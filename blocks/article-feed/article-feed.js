@@ -44,6 +44,15 @@ async function getAuthorLink(el) {
   el.href = found.path;
 }
 
+function createArticleLink(item, className, child) {
+  const link = document.createElement('a');
+  link.className = className;
+  link.href = item.path;
+  link.title = item.title;
+  link.append(child);
+  return link;
+}
+
 function createAuthorEl(item) {
   const wrapper = document.createElement('div');
   wrapper.className = 'article-feed-article-author-wrapper';
@@ -69,15 +78,9 @@ function decorateFeed(data, opts) {
     li.className = 'article-feed-article';
 
     if (opts.layout === 'list') {
-      const imgLink = document.createElement('a');
-      imgLink.className = 'article-feed-article-image-link';
-      imgLink.href = item.path;
-      imgLink.title = item.title;
-
       const pic = createPicture({ src: item.image, breakpoints: [{ width: '1000' }] });
-      imgLink.append(pic);
-
-      article.append(imgLink);
+      const link = createArticleLink(item, 'article-feed-article-image-link', pic);
+      article.append(link);
     }
 
     const date = document.createElement('p');
@@ -90,11 +93,13 @@ function decorateFeed(data, opts) {
     meta.className = 'article-feed-article-meta';
     meta.append(date, author);
 
-    const title = document.createElement('p');
+    const title = document.createElement('h3');
     title.className = 'article-feed-article-title';
     title.innerText = item.title;
 
-    article.append(meta, title);
+    const link = createArticleLink(item, 'article-feed-article-title-link', title);
+
+    article.append(meta, link);
     li.append(article);
     ul.append(li);
   });
@@ -102,10 +107,15 @@ function decorateFeed(data, opts) {
 }
 
 function filterFeed(filter, data) {
-  const [key, search] = filter.split('=');
+  const split = filter.split(' = ');
+  const key = split[0];
+  const search = split[1] === 'no' ? '' : split[1];
 
   return data.reduce((acc, article) => {
-    if (article[key.trim()].includes(search.trim())) {
+    // featured must be an exact match
+    if (key === 'featured' && article[key] === search) {
+      acc.push(article);
+    } else if (key === 'author' && article[key].includes(search)) {
       acc.push(article);
     }
     return acc;
