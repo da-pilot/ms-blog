@@ -134,7 +134,11 @@ function decorateLinks(el) {
     const found = AUTO_BLOCKS.some((pattern) => {
       const key = Object.keys(pattern)[0];
       if (!href.includes(pattern[key])) return false;
-      a.classList.add(key, 'auto-block');
+      // Base CSS classes
+      const classes = [key, 'auto-block'];
+      // If its a fragment, do not load a style
+      if (key === 'fragment') classes.push('cmp');
+      a.classList.add(...classes);
       return true;
     });
     if (found) acc.push(a);

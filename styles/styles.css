@@ -30,7 +30,7 @@
   --font-size-800: 39px;
 
   /* Nav */
-  --header-height: 88px;
+  --header-height: 54px;
 
   /* Corners */
   --corner-small: 4px;
@@ -62,8 +62,6 @@ body {
 
 header {
   min-height: var(--header-height);
-  border-bottom: 1px solid #DDD;
-  box-sizing: border-box;
 }
 
 img {
@@ -163,8 +161,6 @@ h6 {
 
 @media (width > 599px) {
   :root {
-    --header-height: 138px;
-
     --heading-size-300: 18px;
     --heading-size-400: 20px;
     --heading-size-500: 22px;
