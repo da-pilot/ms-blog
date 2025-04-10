@@ -119,7 +119,7 @@ function localizeLinks(links) {
       // If the link is already localized, do nothing
       if (pathname.startsWith(`/${locale.prefix}/`)) return;
 
-      link.href = `${origin}${locale.prefix}${pathname}${search}${hash}`;
+      link.href = `${origin}/${locale.prefix}${pathname}${search}${hash}`;
     } catch {
       console.log('Could not make localized link');
     }

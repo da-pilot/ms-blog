@@ -72,6 +72,7 @@ function decorateFeed(data, opts) {
       const imgLink = document.createElement('a');
       imgLink.className = 'article-feed-article-image-link';
       imgLink.href = item.path;
+      imgLink.title = item.title;
 
       const pic = createPicture({ src: item.image, breakpoints: [{ width: '1000' }] });
       imgLink.append(pic);
@@ -111,6 +112,16 @@ function filterFeed(filter, data) {
   }, []);
 }
 
+function sortFeed(data) {
+  return data.sort((a, b) => {
+    // First compare by date (descending)
+    if (a.date !== b.date) return b.date - a.date;
+
+    // If dates are equal, compare by lastModified (descending)
+    return b.lastModified - a.lastModified;
+  });
+}
+
 const getBlockMeta = (el) => [...el.childNodes].reduce((rdx, row) => {
   if (row.children) {
     const key = row.children[0].textContent.trim();
@@ -134,9 +145,9 @@ export default async function init(el) {
 
   const { data } = await resp.json();
 
+  const sorted = sortFeed(data);
 
-
-  const filtered = filter ? filterFeed(filter.text, data) : data;
+  const filtered = filter ? filterFeed(filter.text, sorted) : sorted;
 
   const layout = el.classList.contains('grid') ? 'grid' : 'list';
   const opts = { layout };

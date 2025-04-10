@@ -21,6 +21,10 @@ indices:
         select: none
         value: |
           parseTimestamp(headers['last-modified'], 'ddd, DD MMM YYYY hh:mm:ss GMT')
+      featured:
+        select: head > meta[name="featured"]
+        value: |
+          attribute(el, "content")
       author:
         select: head > meta[name="author"]
         value: |
