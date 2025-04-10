@@ -17,6 +17,10 @@ indices:
         select: head > meta[name="publication-date"]
         value: |
           dateValue(attribute(el, 'content'), 'MM-DD-YYYY')
+      lastModified:
+        select: none
+        value: |
+          parseTimestamp(headers['last-modified'], 'ddd, DD MMM YYYY hh:mm:ss GMT')
       author:
         select: head > meta[name="author"]
         value: |

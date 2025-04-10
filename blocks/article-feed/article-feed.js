@@ -1,7 +1,10 @@
 import { getConfig } from '../../scripts/nx.js';
 import createPicture from '../../scripts/utils/picture.js';
 
-const QUERY_PATH = '/query-index.json';
+const QUERY_PATH = '/blog/query-index.json';
+const AUTHOR_PATH = '/author/query-index.json';
+
+let fetchingAuthors;
 
 function calculateExcelDate(excelDate) {
   // Excel's date system starts on January 1, 1900
@@ -12,15 +15,48 @@ function calculateExcelDate(excelDate) {
   // Convert Excel date to JavaScript date
   const millisecondsPerDay = 24 * 60 * 60 * 1000;
   const excelEpoch = new Date(1899, 11, 30);
-  console.log(excelEpoch);
 
   // Create a new date by adding the Excel serial number of days
   const jsDate = new Date(excelEpoch.getTime() + excelDate * millisecondsPerDay);
-  console.log(jsDate);
 
   // Format the date as "Apr 4, 2025"
   const options = { month: 'short', day: 'numeric', year: 'numeric' };
   return jsDate.toLocaleDateString('en-US', options);
+}
+
+function fetchAuthors() {
+  fetchingAuthors = new Promise((resolve) => {
+    fetch(AUTHOR_PATH).then(async (resp) => {
+      if (resp.ok) {
+        const json = await resp.json();
+        resolve(json.data);
+      }
+    });
+  });
+}
+
+async function getAuthorLink(el) {
+  const authors = await fetchingAuthors;
+  const found = authors.find(
+    (author) => author.title.replace('Author: ', '') === el.innerText,
+  );
+  if (!found) return;
+  el.href = found.path;
+}
+
+function createAuthorEl(item) {
+  const wrapper = document.createElement('div');
+  wrapper.className = 'article-feed-article-author-wrapper';
+  const authors = item.author.split(' | ');
+  authors.forEach((author) => {
+    const authorEl = document.createElement('a');
+    authorEl.className = 'article-feed-article-author';
+    authorEl.innerText = author;
+    authorEl.href = '#';
+    getAuthorLink(authorEl);
+    wrapper.append(authorEl);
+  });
+  return wrapper;
 }
 
 function decorateFeed(data, opts) {
@@ -47,9 +83,7 @@ function decorateFeed(data, opts) {
     date.className = 'article-feed-article-date';
     date.innerText = calculateExcelDate(item.date);
 
-    const author = document.createElement('p');
-    author.className = 'article-feed-article-author';
-    author.innerText = item.author;
+    const author = createAuthorEl(item);
 
     const meta = document.createElement('div');
     meta.className = 'article-feed-article-meta';
@@ -94,7 +128,13 @@ export default async function init(el) {
   const { filter } = getBlockMeta(el);
   const resp = await fetch(`${locale.base}${QUERY_PATH}`);
   if (!resp.ok) throw new Error('Could not fetch query index');
+
+  // Kick off the author request
+  fetchAuthors();
+
   const { data } = await resp.json();
+
+
 
   const filtered = filter ? filterFeed(filter.text, data) : data;
 
