@@ -1,7 +1,27 @@
-.article-feed .article-feed-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+.article-feed {
+  h2 {
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
+    padding: 32px 0 16px;
+    margin: 0;
+  }
+
+  .article-feed-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &.grid {
+    max-width: var(--grid-container-width);
+    margin: 0 auto;
+
+    .article-feed-list {
+      display: grid;
+      gap: 12px;
+    }
+  }
 }
 
 .article-feed-article-image-link {
@@ -18,5 +38,15 @@
     object-fit: cover;
     width: 100%;
     height: 100%;
+  }
+}
+
+@media (width >= 600px) {
+  .article-feed {
+    &.grid {
+      .article-feed-list {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
   }
 }

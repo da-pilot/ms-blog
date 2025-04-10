@@ -3,7 +3,7 @@ indices:
   blog:
     include:
       - /blog/**
-    target: /query-index.json
+    target: /blog/query-index.json
     properties:
       title:
         select: head > meta[property="og:title"]
@@ -32,3 +32,12 @@ indices:
         select: head > meta[property="article:tag"]
         values: |
           attribute(el, 'content')
+  authors:
+    include:
+      - /author/**
+    target: /author/query-index.json
+    properties:
+      title:
+        select: head > meta[property="og:title"]
+        value: |
+          attribute(el, "content")

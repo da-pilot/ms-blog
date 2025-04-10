@@ -186,9 +186,14 @@ export async function loadArea(area = document) {
 (async function loadNx() {
   // Setup Config
   const { config } = await import('./scripts.js');
-  setConfig(config);
+  const conf = setConfig(config);
+  if (conf.decorateArea) conf.decorateArea();
 
   // Setup template
   const template = getMetadata('template');
   if (template) { document.body.classList.add(`${template}-template`); }
+
+  // Load DA
+  if (!new URL(window.location.href).searchParams.get('dapreview')) return;
+  import('https://da.live/scripts/dapreview.js').then(({ default: daPreview }) => daPreview(loadArea));
 }());
