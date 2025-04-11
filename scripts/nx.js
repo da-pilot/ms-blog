@@ -146,6 +146,17 @@ function decorateLinks(el) {
   }, []);
 }
 
+function decorateIcons(el) {
+  const icons = el.querySelectorAll('span.icon');
+  icons.forEach((icon) => {
+    const name = icon.classList[1].substring(5);
+    const img = document.createElement('img');
+    img.src = `${getConfig().codeBase}/img/icons/${name}.svg`;
+    img.loading = 'lazy';
+    icon.append(img);
+  });
+}
+
 function decorateSections(parent, isDoc) {
   const selector = isDoc ? 'main > div' : ':scope > div';
   return [...parent.querySelectorAll(selector)].map((el) => {
@@ -154,6 +165,7 @@ function decorateSections(parent, isDoc) {
     el.autoBlocks = decorateLinks(el);
     el.blocks = [...el.querySelectorAll(':scope > div[class]')];
     decorateDefaults(el);
+    decorateIcons(el);
     return el;
   });
 }

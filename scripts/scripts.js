@@ -18,7 +18,7 @@ config.decorateArea();
 async function articleCheck() {
   const { pathname } = window.location;
   if (!pathname.startsWith(`${config.locale.base}/blog/`)) return;
-  if (!pathname.split('/').length > 3) return;
+  if (!pathname.split('/').length > 4) return;
   const script = import('../templates/article/article.js');
   const style = loadStyle('/templates/article/article.css');
   await Promise.all([script, style]);
