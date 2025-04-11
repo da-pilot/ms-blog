@@ -1,31 +1,34 @@
-import { getMetadata, loadArea } from '../../scripts/nx.js';
+import { getMetadata, loadArea, loadBlock } from '../../scripts/nx.js';
 
-function createRelatedFeed(section, related) {
+function createRelatedFeed(related) {
   const html = `
-    <div>
-      <div class="article-feed grid">
+    <div class="article-feed grid">
+      <div>
         <div>
-          <div>
-            <h2 id="related">Related</h2>
-          </div>
+          <h2 id="related">Related</h2>
         </div>
-        <div>
-          <div>filter</div>
-          <div>tags = ${related}</div>
-        </div>
+      </div>
+      <div>
+        <div>filter</div>
+        <div>tags = ${related}</div>
       </div>
     </div>
   `;
-  section.insertAdjacentHTML('afterend', html);
+  const section = document.body.querySelector('.side-section');
+  section.insertAdjacentHTML('beforeend', html);
+  loadBlock(section.querySelector('.article-feed'));
 }
 
 export default async function init(el) {
   const article = el.querySelector('article');
   await loadArea(article);
+
+  const related = getMetadata('related');
+  if (related) createRelatedFeed(related);
 }
 
 (function decorateTemplate() {
-  // get all the top level article content
+  // get all the top level article sections
   const content = document.body.querySelectorAll('main > div');
 
   // Create an article tag for semantics
@@ -37,14 +40,15 @@ export default async function init(el) {
   block.className = 'article';
   block.append(article);
 
-  // Create a new section
-  const section = document.createElement('div');
-  section.className = 'article-section';
-  section.append(block);
+  // Create a main section
+  const mainSection = document.createElement('div');
+  mainSection.className = 'article-section';
+  mainSection.append(block);
+
+  // Add a sidebar section
+  const sideSection = document.createElement('div');
+  sideSection.className = 'side-section';
 
   // Add the new synthetic section back to main
-  document.body.querySelector('main').append(section);
-
-  const related = getMetadata('related');
-  if (related) createRelatedFeed(section, related);
+  document.body.querySelector('main').append(mainSection, sideSection);
 }());
