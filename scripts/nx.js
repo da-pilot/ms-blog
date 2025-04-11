@@ -153,6 +153,7 @@ function decorateIcons(el) {
     const img = document.createElement('img');
     img.src = `${getConfig().codeBase}/img/icons/${name}.svg`;
     img.loading = 'lazy';
+    img.alt = '';
     icon.append(img);
   });
 }
