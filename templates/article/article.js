@@ -2,7 +2,7 @@ import { getMetadata } from '../../scripts/nx.js';
 
 function createRelatedFeed(section, related) {
   const html = `
-    <div>
+    <div class="side-section">
       <div class="article-feed grid">
         <div>
           <div>

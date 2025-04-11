@@ -128,7 +128,7 @@ article {
 
 /* sections */
 .section {
-  display: unset;
+  display: block;
 }
 
 /* links */
