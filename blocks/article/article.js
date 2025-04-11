@@ -19,6 +19,11 @@ function createRelatedFeed(section, related) {
   section.insertAdjacentHTML('afterend', html);
 }
 
+export default async function init(el) {
+  const article = el.querySelector('article');
+  await loadArea(article);
+}
+
 (function decorateTemplate() {
   // get all the top level article content
   const content = document.body.querySelectorAll('main > div');
@@ -26,16 +31,20 @@ function createRelatedFeed(section, related) {
   // Create an article tag for semantics
   const article = document.createElement('article');
   article.append(...content);
-  loadArea(article);
 
-  // Add the article to a new synthetic section
+  // Create a new block to house the article tag
+  const block = document.createElement('div');
+  block.className = 'article';
+  block.append(article);
+
+  // Create a new section
   const section = document.createElement('div');
   section.className = 'article-section';
-  section.append(article);
+  section.append(block);
 
   // Add the new synthetic section back to main
   document.body.querySelector('main').append(section);
 
-  // const related = getMetadata('related');
-  // if (related) createRelatedFeed(section, related);
+  const related = getMetadata('related');
+  if (related) createRelatedFeed(section, related);
 }());
