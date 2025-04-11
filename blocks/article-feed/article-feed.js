@@ -118,7 +118,9 @@ function filterFeed(filter, data) {
     } else if (key === 'author' && article[key].includes(search)) {
       acc.push(article);
     } else if (key === 'tags' && article.tags.some((tag) => tag === search)) {
-      acc.push(article);
+      // do not add self to tag based list
+      const { pathname } = window.location;
+      if (article.path !== pathname) acc.push(article);
     }
     return acc;
   }, []);

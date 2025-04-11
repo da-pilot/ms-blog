@@ -71,6 +71,10 @@ header {
   height: var(--header-height);
 }
 
+main {
+  margin-bottom: 24px;
+}
+
 h1,
 h2,
 h3,
@@ -258,7 +262,7 @@ main img {
 @media (width >= 600px) {
   .split-template main {
     max-width: var(--grid-container-width);
-    margin: 0 auto;
+    margin: 0 auto 24px;
     display: grid;
     grid-template-columns: 0.7fr 0.3fr;
     gap: 24px;
