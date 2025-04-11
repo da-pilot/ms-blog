@@ -117,6 +117,8 @@ function filterFeed(filter, data) {
       acc.push(article);
     } else if (key === 'author' && article[key].includes(search)) {
       acc.push(article);
+    } else if (key === 'tags' && article.tags.some((tag) => tag === search)) {
+      acc.push(article);
     }
     return acc;
   }, []);

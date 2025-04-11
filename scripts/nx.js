@@ -184,11 +184,6 @@ export async function loadArea(area = document) {
 }
 
 (async function loadNx() {
-  // Setup Config
-  const { config } = await import('./scripts.js');
-  const conf = setConfig(config);
-  if (conf.decorateArea) conf.decorateArea();
-
   // Setup template
   const template = getMetadata('template');
   if (template) { document.body.classList.add(`${template}-template`); }

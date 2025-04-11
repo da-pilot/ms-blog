@@ -1,33 +1,20 @@
-import { getConfig, getMetadata, loadArea } from '../../scripts/nx.js';
+import { getMetadata } from '../../scripts/nx.js';
+import { loadFragment } from '../fragment/fragment.js';
 
-async function getNavEl() {
-  const source = getMetadata('footer-source') || '/fragments/nav/footer';
-  const resp = await fetch(`${source}.plain.html`);
-  if (!resp.ok) return null;
-  const html = await resp.text();
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(html, 'text/html');
-  const navSections = [...doc.querySelectorAll('body > *')];
-  const nav = document.createElement('nav');
-  nav.append(...navSections);
-  return nav;
-}
+/**
+ * loads and decorates the footer
+ * @param {Element} block The footer block element
+ */
+export default async function decorate(block) {
+  // load footer as fragment
+  const footerMeta = getMetadata('footer');
+  const footerPath = footerMeta ? new URL(footerMeta, window.location).pathname : '/footer';
+  const fragment = await loadFragment(footerPath);
 
-function decorateNav(nav) {
-  const lastButtons = nav.querySelectorAll('.section:last-child strong a');
-  lastButtons.forEach((button) => {
-    button.classList.add('btn', 'btn-primary');
-    const strong = button.parentElement;
-    strong.parentElement.replaceChild(button, strong);
-  });
-}
+  // decorate footer DOM
+  block.textContent = '';
+  const footer = document.createElement('div');
+  while (fragment.firstElementChild) footer.append(fragment.firstElementChild);
 
-export default async function init(el) {
-  const { decorateArea } = getConfig();
-  const nav = await getNavEl();
-  if (!nav) return;
-  el.append(nav);
-  await decorateArea(nav);
-  await loadArea(nav);
-  decorateNav(nav);
+  block.append(footer);
 }
