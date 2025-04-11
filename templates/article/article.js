@@ -36,6 +36,6 @@ function createRelatedFeed(section, related) {
   // Add the new synthetic section back to main
   document.body.querySelector('main').append(section);
 
-  const related = getMetadata('related');
-  if (related) createRelatedFeed(section, related);
+  // const related = getMetadata('related');
+  // if (related) createRelatedFeed(section, related);
 }());

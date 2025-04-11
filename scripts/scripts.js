@@ -24,5 +24,5 @@ async function articleCheck() {
   await Promise.all([script, style]);
 }
 
-await articleCheck();
+articleCheck();
 loadArea();
